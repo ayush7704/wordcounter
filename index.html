@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!--=== font ====-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Istok+Web&family=PT+Sans:ital@1&family=Rubik&display=swap"
+        rel="stylesheet">
+
+    <title>word counter</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #7996a1;
+            /* font-family: math; */
+            color: white;
+            overflow: hidden;
+            background: linear-gradient(45deg, #69a393, #76879d) repeat;
+            min-height: 100dvh;
+            font-family: 'Istok Web', sans-serif;
+            font-family: 'PT Sans', sans-serif;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 1px 4px 1px white;
+            font-size: 1rem;
+            /* background-color: #6782a5; */
+            padding: 14px;
+            font-weight: bold;
+            text-transform: capitalize;
+            color: white;
+            margin-bottom: 7px;
+            /* font-family: system-ui; */
+            box-shadow: 0 1px 9px 0px black;
+        }
+
+        nav h3 {
+            text-shadow: 3px 1px #3b2d2d;
+            order: 1;
+        }
+
+        .click {
+            width: 50px;
+            padding: 10px;
+            cursor: pointer;
+            order: 0;
+        }
+
+        .click span {
+            position: relative;
+            display: block;
+
+        }
+
+        .click span,
+        .click span::before,
+        .click span::after {
+            width: 100%;
+            height: 1.2px;
+            background-color: white;
+        }
+
+        .click span::before,
+        .click span::after {
+            content: '';
+            position: absolute;
+        }
+
+        .click span::before {
+            top: var(--top, -8px);
+            transform: rotate(var(--rotatebfr, 0deg));
+        }
+
+        .click span::after {
+            bottom: var(--bottom, -8px);
+            transform: rotate(var(--rotateaft, 0deg));
+        }
+
+        summary {
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            resize: none;
+            padding: 10px;
+            font-size: 1.3rem;
+            border-radius: 4px 4px 0 0;
+            font-weight: 650;
+            font-family: math;
+            outline: none;
+            border: none;
+            background-color: white;
+            transition: box-shadow 0.3s linear;
+        }
+
+        textarea:focus {
+            box-shadow: 0 0 12px 0px black;
+        }
+
+        .copytextbtn {
+            text-align: center;
+            padding: 10px;
+            z-index: 1;
+            border-radius: 0 0 4px 4px;
+            font-weight: 800;
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            border: none;
+            outline: none;
+            transition: all 0.3s ease-in-out;
+            color: #6f9797;
+            cursor: pointer;
+            opacity: 0;
+            scale: 0;
+        }
+        .copytextbtn:active{
+            box-shadow: 0 1px 8px -2px black;
+            color: black;
+        }
+
+
+        h2:last-of-type {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .d-none {
+            display: none;
+            position: absolute;
+            top: var(--topmargin);
+            left: 0;
+            color: white;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            padding: 12px;
+            border-top: 1px solid white;
+            font-size: 1rem;
+            background: linear-gradient(45deg, #69a393, #76879d) repeat;
+            font-family: system-ui;
+        }
+
+        .d-none ul li {
+            padding: 15px 0 0px 10px;
+            list-style-type: none;
+        }
+
+        .detail-flex {
+            display: flex;
+            margin: 12px 0;
+            align-items: center;
+        }
+
+        ul li a {
+            color: white;
+            display: block;
+            padding: 5px;
+            text-decoration: none;
+        }
+
+        .underline {
+            text-decoration: underline !important;
+        }
+
+        .connect .heading {
+            font-size: 1rem;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 5px;
+            color: gainsboro;
+        }
+
+
+        .connectlink {
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .connectlink img {
+            width: 34px;
+            height: 34px;
+            /* border-radius: 50%; */
+        }
+
+        .fa-phone-volume {
+            font-size: 1.2em;
+        }
+
+        .copytext {
+            position: fixed;
+            bottom: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #80808094;
+            color: var(--theme-text-color, #ffffff);
+            display: none;
+            padding: 8px 12px;
+            font-size: 17px;
+            border-radius: 4px;
+            z-index: 50;
+            width: max-content;
+            backdrop-filter: blur(15px);
+        }
+
+        .radial {
+            position: absolute;
+            left: -130px;
+            bottom: -130px;
+            overflow: hidden;
+            transform: rotate(64deg);
+            border-radius: 50%;
+            background-image: linear-gradient(to top, #875353, #5b8983, #72bbb8);
+            width: 260px;
+            height: 260px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h3 class="h2">word counter from ayush </h3>
+        <h3 class="click">
+            <span></span>
+        </h3>
+    </nav>
+    <section class="d-none">
+        <ul>
+            <li>
+                <details>
+                    <summary>About</summary>
+                    <p class="mb5px">A word and characters counter.</p>
+                    <p class="mb5px">Created in may 2023.</p>
+                    <p class="mb5px">Design & Developed By - <i>Ayush Nagar</i>.</p>
+                </details>
+            </li>
+            <li>
+                <details>
+                    <summary>Contact Developer</summary>
+                    <div class="usefullinks connect translateY">
+                        <div class="connectlink bg translateY">
+                            <img src="phone-call.png" alt="img" class="copy"
+                                style="background-color: white; border-radius: 50%; margin-left: 5px;">
+                            <!-- usually i never use inline styling but used here  -->
+                            <p class="copy">9754742477</p>
+                        </div>
+                        <div class="connectlink bg translateY">
+                            <a href="https://wa.me/919754742477">
+                                <img src="whatsapp.png" alt="img">
+                            </a>
+                            <p><a href="https://wa.me/919754742477">9754742477</a></p>
+                        </div>
+                        <div class="connectlink bg translateY">
+                            <a href="https://linkedin.com/in/ayush-nagar-front-end">
+                                <img src="linkedin.png" alt="img">
+                            </a>
+                            <p><a href="https://linkedin.com/in/ayush-nagar-front-end">Ayush Nagar </a></p>
+                        </div>
+                        <div class="connectlink bg translateY">
+                            <a href="mailto:nagarayush570@gmail.com">
+                                <img src="gmail.png" alt="img">
+                            </a>
+                            <p><a href="mailto:nagarayush570@gmail.com">nagarayush570@gmail.com</a></p>
+                        </div>
+                        <div class="connectlink bg translateY">
+                            <a href="https://ayushnagar-portfolio.netlify.app">
+                                <img src="world-wide-black-symbol.png" alt="img">
+                            </a>
+                            <a href="https://ayushnagar-portfolio.netlify.app">Developer Portfolio</a>
+                        </div>
+                </details>
+            </li>
+            <li>Design & Developed by <i>Ayush Nagar</i>.</li>
+            <li>Open To Work -</li>
+        </ul>
+    </section>
+    <div class="container">
+        <div class="textareacontainer">
+            <textarea name="" id="textarea" cols="30" rows="10" spellcheck="true">
+        </textarea>
+            <button class="copytextbtn copy">Copy Text</button>
+        </div>
+        <h2><span id="char">0</span><span id="word">0</span></h2>
+    </div>
+    <div class="copytext">Phone Number Copied</div>
+    <div class="radial"></div>
+    <!--=========== gsap cdn =========== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+        integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const tm = gsap.timeline()
+        tm.from('nav', {
+            opacity: 0,
+            duration: 0.3
+        }).from('.h2,.click,#textarea,#char,#word', {
+            y: -100,
+            duration: 1,
+            delay: 0.4,
+            opacity: 0,
+            fontSize: '1.3rem',
+            stagger: 0.3
+        }).from('.radial', {
+            top: 0,
+            left: '100%',
+            duration: 0.6,
+            ease: 'back',
+            rotate: 360
+        }).to('.copytextbtn',{
+            opacity:1,
+            scale:1,
+            duration:0.5,
+            delay:-0.2
+            // .from was not working in this
+        })
+
+        document.getElementById('textarea').addEventListener('input', function () {
+            let char = document.getElementById('char');
+            let word = document.getElementById('word');
+
+            let value = this.value;
+            let valuel = value.length;
+            let values = value.split(' ')
+            console.log(values.length)
+            char.innerHTML = (valuel - (values.length - 1)) <= 1 ? valuel - (values.length - 1) + ' character' : valuel - (values.length - 1) + ' characters'
+
+
+            let valuesf = values.filter((value) => value != '')
+            word.innerHTML = valuesf.length <= 1 ? valuesf.length + ' word' : valuesf.length + ' words'
+
+        })
+        const click = document.querySelector('.click');
+        click.addEventListener('click', function () {
+
+
+            const block = document.querySelector('.d-none')
+            const navheight = document.querySelector('nav').offsetHeight;
+            const navspan = document.querySelector('nav span')
+            document.documentElement.style.setProperty('--topmargin', `${navheight}px`)
+
+            const spanbfr = window.getComputedStyle(navspan, '::before')
+            console.log(spanbfr.top)
+            if (spanbfr.top == '-8px') {
+                navspan.style.background = 'transparent'
+                block.style.display = 'block'
+
+                // gsap point 
+                gsap.from('.d-none', {
+                    x: -150,
+                    opacity: 0,
+                    duration: 0.7,
+                })
+                document.documentElement.style.setProperty('--top', `0px`)
+                document.documentElement.style.setProperty('--bottom', `0px`)
+                document.documentElement.style.setProperty('--rotatebfr', `135deg`)
+                document.documentElement.style.setProperty('--rotateaft', `-135deg`)
+            }
+            else {
+                navspan.style.background = ''
+                block.style.display = 'none'
+                document.documentElement.style.setProperty('--top', `-8px`)
+                document.documentElement.style.setProperty('--bottom', `-8px`)
+                document.documentElement.style.setProperty('--rotatebfr', `0deg`)
+                document.documentElement.style.setProperty('--rotateaft', `0deg`)
+            }
+
+        })
+        const copy = document.querySelectorAll('.copy');
+        copy.forEach(event => {
+            event.addEventListener('click', (e) => {
+                let textarea = document.querySelector('textarea')
+                // textarea text copied 
+                if (event.classList.contains('copytextbtn')) {
+                    navigator.vibrate(200, 100)
+                    navigator.clipboard.writeText(textarea.value)
+                    let copytext = document.querySelector('.copytext');
+                    setTimeout(() => {
+                        // if the character length is 0 then nothing will be copy come or all text copy 
+                        if (document.querySelector('#char').innerHTML == '0' || document.querySelector('#char').innerHTML == '0 character') {
+                            copytext.innerText = 'Nothing To Copy!'
+                            copytext.style.display = 'block'
+                           console.log('in')
+                        } else {
+                            copytext.innerText = 'All Text Copied!'
+                            copytext.style.display = 'block'
+                           console.log('out')
+                        }
+                    }, 100)
+                    setTimeout(() => {
+                        copytext.style.display = 'none'
+                    }, 1500)
+                    gsap.fromTo('.radial',{
+                        rotate:64
+                    },{rotate:360,duration:1})
+                }
+                // number copied 
+                else {
+                    e.preventDefault()
+                    navigator.vibrate(200, 100)
+                    navigator.clipboard.writeText(9754742477)
+                    setTimeout(() => {
+                        document.querySelector('.copytext').innerText = 'Phone Number Copied'
+                        document.querySelector('.copytext').style.display = 'block'
+                    }, 100)
+                    setTimeout(() => {
+                        document.querySelector('.copytext').style.display = 'none'
+                    }, 1500)
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
