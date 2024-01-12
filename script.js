@@ -1,23 +1,23 @@
 const tm = gsap.timeline()
 tm.from('nav', {
     opacity: 0,
-    duration: 0.3
-}).from('.h2,.click,#textarea,#char,#word', {
+    duration: 0.2
+}).from('.h2,.click,#textarea,#char,#word,.delete,.case', {
     y: -100,
-    duration: 1,
-    delay: 0.4,
+    // duration: 1,
+    // delay: 0.4,
     opacity: 0,
     // fontSize: '1.3rem',
-    stagger: 0.3
+    stagger: 0.2
 }).from('.radial', {
     top: '-100%',
-    duration: 0.6,
+    duration: 0.4,
     ease: 'back',
 }).to('.copytextbtn', {
     opacity: 1,
     scale: 1,
-    duration: 0.5,
-    delay: -0.2
+    duration: 0.4,
+    delay: -0.1
     // .from was not working in this
 }).to('.Toggle-btn', {
     left: 0,
@@ -26,13 +26,32 @@ tm.from('nav', {
 })
 
 
+let char = document.getElementById('char');
+let word = document.getElementById('word');
+function localstorage() {
+    if (localStorage.getItem('text')) {
+        document.getElementById('textarea').value = localStorage.getItem('text')
+        console.log('if')
+    } else {
+        localStorage.setItem("text", document.getElementById('textarea').value)
+        console.log('else')
+    }
+    if (localStorage.getItem('charsLength')) {
+        char.innerHTML = localStorage.getItem('charsLength')
+    } else {
+        localStorage.setItem('charsLength', char.innerHTML)
+    }
+    if (localStorage.getItem('wordsLength')) {
+        word.innerHTML = localStorage.getItem('wordsLength')
+    } else {
+        localStorage.setItem('wordsLength', word.innerHTML)
+    }
+}
+localstorage()
 document.getElementById('textarea').addEventListener('input', function () {
-    let char = document.getElementById('char');
-    let word = document.getElementById('word');
 
     let value = this.value;
     let valuel = value.length;
-
     let values = value.split(' ')
     console.log(values.length)
 
@@ -49,9 +68,13 @@ document.getElementById('textarea').addEventListener('input', function () {
     word.innerHTML = valuesf.length <= 1 ? valuesf.length + ' word' : valuesf.length + ' words'
 
 })
+window.addEventListener('unload', () => {
+    localStorage.setItem('wordsLength', word.innerHTML)
+    localStorage.setItem('charsLength', char.innerHTML)
+    localStorage.setItem("text", document.getElementById('textarea').value)
+})
 const click = document.querySelector('.click');
 click.addEventListener('click', function () {
-
 
     const block = document.querySelector('.d-none')
     const navheight = document.querySelector('nav').offsetHeight;
@@ -86,9 +109,9 @@ click.addEventListener('click', function () {
 
 })
 const copy = document.querySelectorAll('.copy');
+let textarea = document.querySelector('textarea')
 copy.forEach(event => {
     event.addEventListener('click', (e) => {
-        let textarea = document.querySelector('textarea')
         // textarea text copied 
         if (event.classList.contains('copytextbtn')) {
             navigator.vibrate(200, 100)
@@ -156,3 +179,36 @@ function toggler() {
     })
 }
 toggler()
+
+//== casechange  and mouseover events
+let cases = document.querySelector('.cases')
+function casechange(e,f) {
+    document.documentElement.style.setProperty(`--case`, e)
+    let casesp = document.querySelectorAll('.cases p')
+    for(p of casesp){
+        p.classList.remove('clicked')
+    }
+    f.classList.toggle('clicked')
+    console.log(f)
+    cases.style.transform = 'rotateX(90deg)'
+}
+let caseparent = document.querySelector('.case')
+caseparent.addEventListener('mouseover', () => {
+    let char = document.getElementById('char')
+    // if(char.value.length < 1){
+    //     document.querySelector('.case').style.cursor='no-drop'
+    //     console.log('ineter')
+    // }
+    // else{
+    cases.style.transform = 'rotateX(0deg)'
+    // }
+})
+caseparent.addEventListener('mouseleave', () => {
+    cases.style.transform = 'rotateX(90deg)'
+})
+
+document.querySelector('.delete').addEventListener('click', () => {
+    textarea.value = ''
+    word.innerHTML = '0'
+    char.innerHTML = '0'
+})
