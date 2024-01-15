@@ -114,19 +114,37 @@ copy.forEach(event => {
     event.addEventListener('click', (e) => {
         // textarea text copied 
         if (event.classList.contains('copytextbtn')) {
+            let casevalue = document.querySelector('.clicked').innerText;
             navigator.vibrate(200, 100)
-            navigator.clipboard.writeText(textarea.value)
             let copytext = document.querySelector('.copytext');
+
+            switch (casevalue) {
+                case 'UpperCase':
+                    navigator.clipboard.writeText(textarea.value.toUpperCase())
+                    break;
+                case 'LowerCase':
+                    navigator.clipboard.writeText(textarea.value.toLowerCase())
+                    break;
+                case 'Capitalize':
+                    let valuesplit = textarea.value.split(' ')
+                    let valuejoin = valuesplit.map((b) => {
+                        return b.charAt(0).toUpperCase() + b.slice(1).toLowerCase()
+                    })
+                    navigator.clipboard.writeText(valuejoin.join(' '))
+                    break
+                default:
+                    navigator.clipboard.writeText(textarea.value)
+                    break;
+            }
+
             setTimeout(() => {
                 // if the character length is 0 then nothing will be copy come or all text copy 
                 if (document.querySelector('#char').innerHTML == '0' || document.querySelector('#char').innerHTML == '0 character') {
                     copytext.innerText = 'Nothing To Copy!'
                     copytext.style.display = 'block'
-                    console.log('in')
                 } else {
                     copytext.innerText = 'All Text Copied!'
                     copytext.style.display = 'block'
-                    console.log('out')
                 }
             }, 100)
             setTimeout(() => {
@@ -182,14 +200,13 @@ toggler()
 
 //== casechange  and mouseover events
 let cases = document.querySelector('.cases')
-function casechange(e,f) {
+function casechange(e, f) {
     document.documentElement.style.setProperty(`--case`, e)
     let casesp = document.querySelectorAll('.cases p')
-    for(p of casesp){
+    for (p of casesp) {
         p.classList.remove('clicked')
     }
     f.classList.toggle('clicked')
-    console.log(f)
     cases.style.transform = 'rotateX(90deg)'
 }
 let caseparent = document.querySelector('.case')
