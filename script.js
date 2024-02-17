@@ -229,3 +229,23 @@ document.querySelector('.delete').addEventListener('click', () => {
     word.innerHTML = '0'
     char.innerHTML = '0'
 })
+let radial = document.querySelector('.radial')
+setInterval(() => {
+    let width = Math.floor(Math.random() * (200 - 170)) + 170;
+    let height = Math.floor(Math.random() * (260 - 200)) + 200;
+    gsap.to(radial, {
+        width: `${width}px`,
+        height: `${width}px`,
+        borderTopRightRadius: `${Math.floor(Math.random() * (200 - 100)) + 100}px ${Math.floor(Math.random() * (230 - 180)) + 180}px`,
+        borderTopLeftRadius: `${Math.floor(Math.random() * (230 - 180)) + 180}px ${Math.floor(Math.random() * (230 - 100)) + 100}px`,
+        borderBottomRightRadius: `${Math.floor(Math.random() * (200 - 100)) + 100}px ${Math.floor(Math.random() * (230 - 180)) + 180}px`,
+        borderBottomLeftRadius: `${Math.floor(Math.random() * (230 - 180)) + 180}px ${Math.floor(Math.random() * (230 - 100)) + 100}px`,
+        duration: 0.5
+    })
+}, 1000)
+gsap.to(radial, {
+    rotate: 360,
+    duration: 5,
+    repeat: -1,
+    ease: 'none'
+})
